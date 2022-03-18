@@ -14,3 +14,9 @@ remainder: git need to install some time
 sudo apt install git 
 ```
 
+also curl
+
+```
+sudo apt install curl
+```
+
