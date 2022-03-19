@@ -17,9 +17,10 @@ endif
 
 call plug#begin()
 
+Plug 'vim-airline/vim-airline'
+Plug 'vim-airline/vim-airline-themes'
 Plug 'scrooloose/nerdtree'
 Plug 'morhetz/gruvbox'
-Plug 'vim-airline/vim-airline'
 Plug 'mhinz/vim-startify'
 
 call plug#end()
@@ -28,8 +29,33 @@ call plug#end()
 
 map <C-n> :NERDTreeToggle<CR>
 
-let g:airline_statusline_ontop = 1
-let g:airline_powerline_fonts = 1
 let g:gruvbox_italic=1
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
+
+" Compile function
+noremap r :call CompileRun()<CR>
+function! CompileRun()
+  execute "w"
+  if &filetype == 'c'
+    if !isdirectory('build')
+      execute "!mkdir build"
+    endif
+    execute "!gcc % -o build/%<"
+    execute "!time ./build/%<"
+  elseif &filetype == 'cpp'
+    if !isdirectory('build')
+      execute "!mkdir build"
+    endif
+    execute "!g++ % -o build/%<"
+    execute "!time ./build/%<"
+  endif
+endfunction
+
+"heading
+autocmd BufNewFile *.v,*.sv,*.cpp,*.c,*.h exec ":call Setfilehead()"
+func Setfilehead()
+    call append(0, '/***********************************************')
+    call append(1, '#        Create: '.strftime("%Y-%m-%d %H:%M:%S"))
+    call append(2, '***********************************************/')
+endfunc
