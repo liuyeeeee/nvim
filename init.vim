@@ -6,6 +6,8 @@ endif
 
 :set number
 :set relativenumber
+:set softtabstop=4 shiftwidth=4 expandtab
+
 silent !mkdir -p $HOME/.config/nvim/tmp/backup
 silent !mkdir -p $HOME/.config/nvim/tmp/undo
 set backupdir=$HOME/.config/nvim/tmp/backup,.
@@ -15,17 +17,27 @@ if has('persistent_undo')
 	set undodir=$HOME/.config/nvim/tmp/undo,.
 endif
 
+syntax on
+
 call plug#begin()
 
 Plug 'vim-airline/vim-airline'
 Plug 'vim-airline/vim-airline-themes'
+Plug 'ryanoasis/vim-devicons'
 Plug 'scrooloose/nerdtree'
 Plug 'morhetz/gruvbox'
 Plug 'mhinz/vim-startify'
+Plug 'jiangmiao/auto-pairs'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
 
 call plug#end()
 
+" Use <Tab> and <S-Tab> to navigate the completion list
+inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+inoremap <expr> <S-Tab> pumvisible() ? "\<C-p>" : "\<S-Tab>"
+
 :colorscheme gruvbox
+autocmd vimenter * hi Normal guibg=NONE ctermbg=NONE " transparent bg
 
 map <C-n> :NERDTreeToggle<CR>
 
@@ -33,22 +45,17 @@ let g:gruvbox_italic=1
 let g:NERDTreeDirArrowExpandable="+"
 let g:NERDTreeDirArrowCollapsible="~"
 
-" Compile function
+"airline setting 
+let g:airline_powerline_fonts = 1
+
+"Compile function
 noremap r :call CompileRun()<CR>
 function! CompileRun()
   execute "w"
   if &filetype == 'c'
-    if !isdirectory('build')
-      execute "!mkdir build"
-    endif
-    execute "!gcc % -o build/%<"
-    execute "!time ./build/%<"
+    execute "!gcc % -o %<"
   elseif &filetype == 'cpp'
-    if !isdirectory('build')
-      execute "!mkdir build"
-    endif
-    execute "!g++ % -o build/%<"
-    execute "!time ./build/%<"
+    execute "!g++ % -o %<"
   endif
 endfunction
 
@@ -58,4 +65,8 @@ func Setfilehead()
     call append(0, '/***********************************************')
     call append(1, '#        Create: '.strftime("%Y-%m-%d %H:%M:%S"))
     call append(2, '***********************************************/')
+    if &filetype =='cpp'
+        call append(4,"#include<bits/stdc++.h>")
+        call append(5,"using namespace std;")
+    endif
 endfunc
