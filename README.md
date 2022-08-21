@@ -26,7 +26,7 @@ sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.
 vi ~/.zshrc
 chsh -s $(which zsh)
 
-##git clone
+## git clone
 ```
 ~/.config
 ```
