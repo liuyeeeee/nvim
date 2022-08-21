@@ -29,4 +29,3 @@ chsh -s $(which zsh)
 ## git clone
 ```
 ~/.config
-```
