@@ -25,7 +25,7 @@ sudo apt install zsh
 sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 vi ~/.zshrc
 chsh -s $(which zsh)
-
+```
 ## git clone
 ```
 ~/.config
